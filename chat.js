@@ -1,25 +1,39 @@
-// Your Firebase config (replace with your values)
+// Import Firebase functions
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
+
+// ==============================
+// 1️⃣ Firebase configuration
+// ==============================
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBMPhJN6CpjvfF0xqDzmlsUyGwdBwUKcmk",
+  authDomain: "chatroom-2355a.firebaseapp.com",
+  databaseURL: "https://chatroom-2355a-default-rtdb.firebaseio.com", // added databaseURL
+  projectId: "chatroom-2355a",
+  storageBucket: "chatroom-2355a.appspot.com", // fixed storageBucket
+  messagingSenderId: "370501140294",
+  appId: "1:370501140294:web:43bb94cb00994592f82f47",
+  measurementId: "G-WSHQYL4KVQ"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+// ==============================
+// 2️⃣ Initialize Firebase
+// ==============================
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getDatabase(app);
 
+// ==============================
+// 3️⃣ Chatroom functionality
+// ==============================
 let username = "";
 
 // Join chat
-function joinChat() {
+window.joinChat = function() {
     username = document.getElementById("username").value.trim();
-    if(!username) {
-        alert("Enter username!");
+    if (!username) {
+        alert("Enter a username!");
         return;
     }
 
@@ -27,10 +41,11 @@ function joinChat() {
     document.getElementById("username").style.display = "none";
 
     // Notify join
-    db.ref("messages").push({user:"System", text:`${username} joined the chat`});
+    push(ref(db, "messages"), { user: "System", text: `${username} joined the chat` });
 
     // Listen for new messages
-    db.ref("messages").on("child_added", snapshot => {
+    const messagesRef = ref(db, "messages");
+    onChildAdded(messagesRef, (snapshot) => {
         const msg = snapshot.val();
         const messagesDiv = document.getElementById("messages");
         messagesDiv.innerHTML += `<b>${msg.user}:</b> ${msg.text}<br>`;
@@ -39,15 +54,15 @@ function joinChat() {
 }
 
 // Send message
-function sendMessage() {
+window.sendMessage = function() {
     const text = document.getElementById("message").value.trim();
-    if(!text) return;
-    db.ref("messages").push({user: username, text});
+    if (!text) return;
+    push(ref(db, "messages"), { user: username, text });
     document.getElementById("message").value = "";
 }
 
 // Leave chat
-function leaveChat() {
-    db.ref("messages").push({user:"System", text:`${username} left the chat`});
+window.leaveChat = function() {
+    push(ref(db, "messages"), { user: "System", text: `${username} left the chat` });
     location.reload();
 }
