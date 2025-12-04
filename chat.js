@@ -1,3 +1,6 @@
+// ==============================
+// 1️⃣ Firebase configuration
+// ==============================
 const firebaseConfig = {
   apiKey: "AIzaSyBMPhJN6CpjvfF0xqDzmlsUyGwdBwUKcmk",
   authDomain: "chatroom-2355a.firebaseapp.com",
@@ -9,15 +12,24 @@ const firebaseConfig = {
   measurementId: "G-WSHQYL4KVQ"
 };
 
+// ==============================
+// 2️⃣ Initialize Firebase
+// ==============================
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// ==============================
+// 3️⃣ Chatroom functionality
+// ==============================
 let username = "";
 
 // Join chat
-function joinChat() {
+window.joinChat = function() {
     username = document.getElementById("username").value.trim();
-    if (!username) { alert("Enter a username!"); return; }
+    if (!username) { 
+        alert("Enter a username!"); 
+        return; 
+    }
 
     document.getElementById("chatbox").style.display = "block";
     document.getElementById("username").style.display = "none";
@@ -27,7 +39,7 @@ function joinChat() {
 
     // Listen for new messages
     const messagesRef = db.ref("messages");
-    messagesRef.off(); // Remove any previous listeners
+    messagesRef.off(); // Remove previous listeners
     messagesRef.on("child_added", function(snapshot) {
         const msg = snapshot.val();
         const messagesDiv = document.getElementById("messages");
@@ -37,7 +49,7 @@ function joinChat() {
 }
 
 // Send message
-function sendMessage() {
+window.sendMessage = function() {
     const text = document.getElementById("message").value.trim();
     if (!text) return;
     db.ref("messages").push({ user: username, text });
@@ -45,7 +57,7 @@ function sendMessage() {
 }
 
 // Leave chat
-function leaveChat() {
+window.leaveChat = function() {
     db.ref("messages").push({ user: "System", text: `${username} left the chat` });
     location.reload();
 }
