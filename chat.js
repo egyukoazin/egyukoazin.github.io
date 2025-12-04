@@ -4,7 +4,7 @@
 const firebaseConfig = {
   apiKey: "AIzaSyBMPhJN6CpjvfF0xqDzmlsUyGwdBwUKcmk",
   authDomain: "chatroom-2355a.firebaseapp.com",
-  databaseURL: "https://chatroom-2355a-default-rtdb.firebaseio.com",
+  databaseURL: "https://chatroom-2355a-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "chatroom-2355a",
   storageBucket: "chatroom-2355a.appspot.com",
   messagingSenderId: "370501140294",
@@ -59,3 +59,4 @@ function leaveChat() {
     db.ref("messages").push({ user: "System", text: `${username} left the chat` });
     location.reload();
 }
+
