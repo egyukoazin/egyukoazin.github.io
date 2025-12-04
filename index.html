@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chatroom</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #1e1e1e; color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+    input { padding: 10px; margin: 5px; border-radius: 5px; border: none; }
+    button { padding: 10px; margin: 5px; border-radius: 5px; border: none; background: #4CAF50; color: white; cursor: pointer; }
+    #chatbox { display:none; border:1px solid #444; padding:10px; width:400px; height:300px; overflow:auto; margin-top:10px; background: #2c2c2c; border-radius: 5px; }
+    #messages { max-height: 200px; overflow-y: auto; margin-bottom: 10px; }
+    #messages b { color: #ffcc00; }
+  </style>
+</head>
+<body>
+
+<h2>Join Chatroom</h2>
+
+<input id="username" placeholder="Enter your username"><br>
+<button onclick="joinChat()">Join</button>
+
+<div id="chatbox">
+  <h3>Chatroom</h3>
+  <div id="messages"></div>
+  <input id="message" placeholder="Type message...">
+  <button onclick="sendMessage()">Send</button>
+  <button onclick="leaveChat()">Leave</button>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script src="chat.js"></script>
+
+</body>
+</html>
